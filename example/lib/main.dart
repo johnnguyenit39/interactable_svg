@@ -56,10 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 key: mapKey,
                 svgAddress: "assets/floor_map.svg",
                 onChanged: (region) {
-                  setState(() {
-                    selectedRegion = region;
-                  });
-                  selectedValue = null;
+                  // setState(() {
+                  //   selectedRegion = region;
+                  // });
                   print(region?.name);
                 },
                 width: double.infinity,
@@ -89,7 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
               }
               setState(() {});
               selectedValue = '113';
-              selectedRegion = null;
             },
             color: Colors.blue,
             child: const Text("select last selected room"),

@@ -150,6 +150,7 @@ class InteractableSvgState extends State<InteractableSvg> {
   void didUpdateWidget(covariant InteractableSvg oldWidget) {
     setState(() {
       selectedValue = widget.selectedValue;
+      selectedRegion.clear();
     });
     super.didUpdateWidget(oldWidget);
   }
@@ -235,7 +236,6 @@ class InteractableSvgState extends State<InteractableSvg> {
   }
 
   void toggleButton(Region region) {
-    selectedValue = null;
     if (region.id != widget.unSelectableId) {
       setState(() {
         if (selectedRegion.contains(region)) {
