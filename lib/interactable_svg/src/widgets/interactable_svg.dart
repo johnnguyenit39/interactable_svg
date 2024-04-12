@@ -193,11 +193,13 @@ class InteractableSvgState extends State<InteractableSvg> {
   }
 
   Widget _buildStackItem(Region region) {
-    selectedRegion = _regionList
-        .where(
-          (element) => element.id == widget.selectedValue,
-        )
-        .toList();
+    bool isSelect = false;
+    if (widget.selectedValue != null) {
+      isSelect = _regionList.any(
+        (element) => element.id == widget.selectedValue,
+      );
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.deferToChild,
       onTap: () => (widget.toggleEnable ?? false)
@@ -207,6 +209,7 @@ class InteractableSvgState extends State<InteractableSvg> {
         isComplex: true,
         foregroundPainter: RegionPainter(
           region: region,
+          isSelected: selectedRegion.contains(region) || isSelect,
           selectedRegion: selectedRegion,
           dotColor: widget.dotColor,
           selectedColor: widget.selectedColor,

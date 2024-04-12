@@ -17,7 +17,8 @@ class RegionPainter extends CustomPainter {
   final bool? centerTextEnable;
   final TextStyle? centerTextStyle;
   final String? unSelectableId;
-  final ui.Image? pinIcon; // Thêm thuộc tính để lưu trữ biểu tượng pin map
+  final ui.Image? pinIcon;
+  final bool isSelected; // Thêm thuộc tính để lưu trữ biểu tượng pin map
 
   final sizeController = SizeController.instance;
 
@@ -35,7 +36,8 @@ class RegionPainter extends CustomPainter {
     this.centerTextStyle,
     this.strokeWidth,
     this.unSelectableId,
-    this.pinIcon, // Thêm tham số để truyền biểu tượng pin map vào
+    this.pinIcon,
+    this.isSelected = false, // Thêm tham số để truyền biểu tượng pin map vào
   });
 
   @override
@@ -66,11 +68,11 @@ class RegionPainter extends CustomPainter {
       canvas.drawPath(region.path, colorFill);
     }
 
-    if (selectedRegion.contains(region)) {
+    if (isSelected) {
       canvas.drawPath(region.path, selectedPen);
     }
     canvas.drawPath(region.path, pen);
-    if (pinIcon != null && selectedRegion.contains(region)) {
+    if (pinIcon != null && isSelected) {
       final iconOffset = Offset(bounds.center.dx - pinIcon!.width / 2,
           bounds.center.dy - pinIcon!.height);
       canvas.drawImage(pinIcon!, iconOffset, Paint());
