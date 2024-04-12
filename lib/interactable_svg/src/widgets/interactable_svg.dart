@@ -118,6 +118,8 @@ class InteractableSvgState extends State<InteractableSvg> {
   final List<Region> _regionList = [];
 
   List<Region> selectedRegion = [];
+  String? selectedValue;
+
   final _sizeController = SizeController.instance;
   Size? mapSize;
 
@@ -149,7 +151,6 @@ class InteractableSvgState extends State<InteractableSvg> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getImage();
-
       _loadRegionList();
     });
   }
@@ -169,9 +170,11 @@ class InteractableSvgState extends State<InteractableSvg> {
     setState(() {
       _regionList.addAll(list);
       mapSize = _sizeController.mapSize;
+      selectedValue = widget.selectedValue;
+
       selectedRegion = _regionList
           .where(
-            (element) => element.id == widget.selectedValue,
+            (element) => element.id == selectedValue,
           )
           .toList();
     });
@@ -195,9 +198,7 @@ class InteractableSvgState extends State<InteractableSvg> {
   Widget _buildStackItem(Region region) {
     bool isSelect = false;
     if (widget.selectedValue != null) {
-      isSelect = _regionList.any(
-        (element) => element.id == widget.selectedValue,
-      );
+      isSelect = region.id == selectedValue;
     }
 
     return GestureDetector(
@@ -220,7 +221,6 @@ class InteractableSvgState extends State<InteractableSvg> {
           strokeWidth: widget.strokeWidth,
           unSelectableId: widget.unSelectableId,
           pinIcon: pinIcon,
-          fillColor: widget.fillColor,
         ),
         child: Container(
           width: widget.width ?? double.infinity,
@@ -234,6 +234,7 @@ class InteractableSvgState extends State<InteractableSvg> {
   }
 
   void toggleButton(Region region) {
+    selectedValue = null;
     if (region.id != widget.unSelectableId) {
       setState(() {
         if (selectedRegion.contains(region)) {
@@ -260,6 +261,7 @@ class InteractableSvgState extends State<InteractableSvg> {
         } else {
           selectedRegion.clear();
           selectedRegion.add(region);
+          selectedValue = region.id;
 
           widget.onChanged.call(region);
         }
