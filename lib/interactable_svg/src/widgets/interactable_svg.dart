@@ -1,8 +1,12 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
-import './region_painter.dart';
+import 'package:flutter/services.dart';
+
 import '../models/region.dart';
 import '../parser.dart';
 import '../size_controller.dart';
+import './region_painter.dart';
 
 class InteractableSvg extends StatefulWidget {
   final bool _isFromWeb;
@@ -22,6 +26,9 @@ class InteractableSvg extends StatefulWidget {
   final bool? centerTextEnable;
   final bool? isMultiSelectable;
   final TextStyle? centerTextStyle;
+  final String? centerIconPath;
+  final int? heightCenterIconPath;
+  final int? widthCenterIconPath;
 
   const InteractableSvg({
     Key? key,
@@ -39,49 +46,58 @@ class InteractableSvg extends StatefulWidget {
     this.centerTextStyle,
     this.toggleEnable,
     this.isMultiSelectable,
+    this.centerIconPath,
+    this.heightCenterIconPath,
+    this.widthCenterIconPath,
   })  : _isFromWeb = false,
         _isString = false,
         fileName = "",
         super(key: key);
 
-  const InteractableSvg.network(
-      {required this.fileName,
-      Key? key,
-      required this.svgAddress,
-      required this.onChanged,
-      this.width,
-      this.height,
-      this.strokeColor,
-      this.strokeWidth,
-      this.selectedColor,
-      this.dotColor,
-      this.unSelectableId,
-      this.centerDotEnable,
-      this.centerTextEnable,
-      this.centerTextStyle,
-      this.toggleEnable,
-      this.isMultiSelectable})
-      : _isFromWeb = true,
+  const InteractableSvg.network({
+    required this.fileName,
+    Key? key,
+    required this.svgAddress,
+    required this.onChanged,
+    this.width,
+    this.height,
+    this.strokeColor,
+    this.strokeWidth,
+    this.selectedColor,
+    this.dotColor,
+    this.unSelectableId,
+    this.centerDotEnable,
+    this.centerTextEnable,
+    this.centerTextStyle,
+    this.toggleEnable,
+    this.isMultiSelectable,
+    this.centerIconPath,
+    this.heightCenterIconPath,
+    this.widthCenterIconPath,
+  })  : _isFromWeb = true,
         _isString = false,
         super(key: key);
 
-  const InteractableSvg.string(
-      {Key? key,
-      required this.svgAddress,
-      required this.onChanged,
-      this.width,
-      this.height,
-      this.strokeColor,
-      this.strokeWidth,
-      this.selectedColor,
-      this.dotColor,
-      this.unSelectableId,
-      this.centerDotEnable,
-      this.centerTextEnable,
-      this.centerTextStyle,
-      this.toggleEnable,
-      this.isMultiSelectable})
-      : _isFromWeb = false,
+  const InteractableSvg.string({
+    Key? key,
+    required this.svgAddress,
+    required this.onChanged,
+    this.width,
+    this.height,
+    this.strokeColor,
+    this.strokeWidth,
+    this.selectedColor,
+    this.dotColor,
+    this.unSelectableId,
+    this.centerDotEnable,
+    this.centerTextEnable,
+    this.centerTextStyle,
+    this.toggleEnable,
+    this.isMultiSelectable,
+    this.centerIconPath,
+    this.heightCenterIconPath,
+    this.widthCenterIconPath,
+  })  : _isFromWeb = false,
         _isString = true,
         fileName = "",
         super(key: key);
@@ -97,11 +113,35 @@ class InteractableSvgState extends State<InteractableSvg> {
   final _sizeController = SizeController.instance;
   Size? mapSize;
 
+  ui.Image? pinIcon;
+  Future<ui.Image> getUiImage(
+      String imageAssetPath, int height, int width) async {
+    final ByteData assetImageByteData = await rootBundle.load(imageAssetPath);
+    final codec = await ui.instantiateImageCodec(
+      assetImageByteData.buffer.asUint8List(),
+      targetHeight: height,
+      targetWidth: width,
+    );
+    final image = (await codec.getNextFrame()).image;
+    return image;
+  }
+
+  getImage() async {
+    if (widget.centerIconPath != null) {
+      pinIcon = await getUiImage(
+        widget.centerIconPath!,
+        widget.heightCenterIconPath ?? 40,
+        widget.widthCenterIconPath ?? 40,
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadRegionList();
+      getImage();
     });
   }
 
@@ -147,16 +187,18 @@ class InteractableSvgState extends State<InteractableSvg> {
       child: CustomPaint(
         isComplex: true,
         foregroundPainter: RegionPainter(
-            region: region,
-            selectedRegion: selectedRegion,
-            dotColor: widget.dotColor,
-            selectedColor: widget.selectedColor,
-            strokeColor: widget.strokeColor,
-            centerDotEnable: widget.centerDotEnable,
-            centerTextEnable: widget.centerTextEnable,
-            centerTextStyle: widget.centerTextStyle,
-            strokeWidth: widget.strokeWidth,
-            unSelectableId: widget.unSelectableId),
+          region: region,
+          selectedRegion: selectedRegion,
+          dotColor: widget.dotColor,
+          selectedColor: widget.selectedColor,
+          strokeColor: widget.strokeColor,
+          centerDotEnable: widget.centerDotEnable,
+          centerTextEnable: widget.centerTextEnable,
+          centerTextStyle: widget.centerTextStyle,
+          strokeWidth: widget.strokeWidth,
+          unSelectableId: widget.unSelectableId,
+          pinIcon: pinIcon,
+        ),
         child: Container(
           width: widget.width ?? double.infinity,
           height: widget.height ?? double.infinity,
