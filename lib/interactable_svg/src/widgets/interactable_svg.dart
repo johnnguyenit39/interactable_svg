@@ -29,6 +29,7 @@ class InteractableSvg extends StatefulWidget {
   final String? centerIconPath;
   final int? heightCenterIconPath;
   final int? widthCenterIconPath;
+  final Color? fillColor;
 
   const InteractableSvg({
     Key? key,
@@ -49,6 +50,7 @@ class InteractableSvg extends StatefulWidget {
     this.centerIconPath,
     this.heightCenterIconPath,
     this.widthCenterIconPath,
+    this.fillColor,
   })  : _isFromWeb = false,
         _isString = false,
         fileName = "",
@@ -74,6 +76,7 @@ class InteractableSvg extends StatefulWidget {
     this.centerIconPath,
     this.heightCenterIconPath,
     this.widthCenterIconPath,
+    this.fillColor,
   })  : _isFromWeb = true,
         _isString = false,
         super(key: key);
@@ -97,6 +100,7 @@ class InteractableSvg extends StatefulWidget {
     this.centerIconPath,
     this.heightCenterIconPath,
     this.widthCenterIconPath,
+    this.fillColor,
   })  : _isFromWeb = false,
         _isString = true,
         fileName = "",
@@ -198,6 +202,7 @@ class InteractableSvgState extends State<InteractableSvg> {
           strokeWidth: widget.strokeWidth,
           unSelectableId: widget.unSelectableId,
           pinIcon: pinIcon,
+          fillColor: widget.fillColor,
         ),
         child: Container(
           width: widget.width ?? double.infinity,

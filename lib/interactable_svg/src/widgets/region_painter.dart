@@ -10,6 +10,7 @@ class RegionPainter extends CustomPainter {
   final List<Region> selectedRegion;
   final Color? strokeColor;
   final Color? selectedColor;
+  final Color? fillColor;
   final Color? dotColor;
   final double? strokeWidth;
   final bool? centerDotEnable;
@@ -26,6 +27,7 @@ class RegionPainter extends CustomPainter {
     required this.region,
     required this.selectedRegion,
     this.selectedColor,
+    this.fillColor,
     this.strokeColor,
     this.dotColor,
     this.centerDotEnable,
@@ -47,6 +49,9 @@ class RegionPainter extends CustomPainter {
       ..color = selectedColor ?? Colors.blue
       ..strokeWidth = 1.0
       ..style = PaintingStyle.fill;
+    final fill = Paint()
+      ..color = fillColor ?? Colors.grey
+      ..style = PaintingStyle.fill;
 
     final redDot = Paint()
       ..color = dotColor ?? Colors.red
@@ -61,6 +66,10 @@ class RegionPainter extends CustomPainter {
     if (selectedRegion.contains(region)) {
       canvas.drawPath(region.path, selectedPen);
     }
+    if (fillColor != null) {
+      canvas.drawPath(region.path, fill);
+    }
+
     canvas.drawPath(region.path, pen);
 
     if (pinIcon != null && selectedRegion.contains(region)) {
