@@ -193,6 +193,11 @@ class InteractableSvgState extends State<InteractableSvg> {
   }
 
   Widget _buildStackItem(Region region) {
+    selectedRegion = _regionList
+        .where(
+          (element) => element.id == widget.selectedValue,
+        )
+        .toList();
     return GestureDetector(
       behavior: HitTestBehavior.deferToChild,
       onTap: () => (widget.toggleEnable ?? false)
