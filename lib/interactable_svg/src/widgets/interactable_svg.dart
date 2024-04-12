@@ -221,6 +221,7 @@ class InteractableSvgState extends State<InteractableSvg> {
           strokeWidth: widget.strokeWidth,
           unSelectableId: widget.unSelectableId,
           pinIcon: pinIcon,
+          fillColor: widget.fillColor,
         ),
         child: Container(
           width: widget.width ?? double.infinity,
