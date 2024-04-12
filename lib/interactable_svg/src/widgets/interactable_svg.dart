@@ -30,6 +30,7 @@ class InteractableSvg extends StatefulWidget {
   final int? heightCenterIconPath;
   final int? widthCenterIconPath;
   final Color? fillColor;
+  final String? selectedValue;
 
   const InteractableSvg({
     Key? key,
@@ -51,6 +52,7 @@ class InteractableSvg extends StatefulWidget {
     this.heightCenterIconPath,
     this.widthCenterIconPath,
     this.fillColor,
+    this.selectedValue,
   })  : _isFromWeb = false,
         _isString = false,
         fileName = "",
@@ -77,6 +79,7 @@ class InteractableSvg extends StatefulWidget {
     this.heightCenterIconPath,
     this.widthCenterIconPath,
     this.fillColor,
+    this.selectedValue,
   })  : _isFromWeb = true,
         _isString = false,
         super(key: key);
@@ -101,6 +104,7 @@ class InteractableSvg extends StatefulWidget {
     this.heightCenterIconPath,
     this.widthCenterIconPath,
     this.fillColor,
+    this.selectedValue,
   })  : _isFromWeb = false,
         _isString = true,
         fileName = "",
@@ -144,8 +148,9 @@ class InteractableSvgState extends State<InteractableSvg> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadRegionList();
       getImage();
+
+      _loadRegionList();
     });
   }
 
@@ -164,6 +169,11 @@ class InteractableSvgState extends State<InteractableSvg> {
     setState(() {
       _regionList.addAll(list);
       mapSize = _sizeController.mapSize;
+      selectedRegion = _regionList
+          .where(
+            (element) => element.id == widget.selectedValue,
+          )
+          .toList();
     });
   }
 
