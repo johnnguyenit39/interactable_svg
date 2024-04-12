@@ -147,6 +147,14 @@ class InteractableSvgState extends State<InteractableSvg> {
   }
 
   @override
+  void didUpdateWidget(covariant InteractableSvg oldWidget) {
+    setState(() {
+      selectedValue = widget.selectedValue;
+    });
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -171,12 +179,6 @@ class InteractableSvgState extends State<InteractableSvg> {
       _regionList.addAll(list);
       mapSize = _sizeController.mapSize;
       selectedValue = widget.selectedValue;
-
-      selectedRegion = _regionList
-          .where(
-            (element) => element.id == selectedValue,
-          )
-          .toList();
     });
   }
 
@@ -197,9 +199,7 @@ class InteractableSvgState extends State<InteractableSvg> {
 
   Widget _buildStackItem(Region region) {
     bool isSelect = false;
-    if (widget.selectedValue != null) {
-      isSelect = region.id == selectedValue;
-    }
+    isSelect = region.id == selectedValue;
 
     return GestureDetector(
       behavior: HitTestBehavior.deferToChild,
@@ -262,7 +262,7 @@ class InteractableSvgState extends State<InteractableSvg> {
         } else {
           selectedRegion.clear();
           selectedRegion.add(region);
-          selectedValue = region.id;
+          selectedValue = region.name;
 
           widget.onChanged.call(region);
         }

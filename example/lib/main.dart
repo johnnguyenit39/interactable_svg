@@ -5,7 +5,6 @@ void main() {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -35,7 +34,7 @@ final GlobalKey<InteractableSvgState> mapKey = GlobalKey();
 
 class _MyHomePageState extends State<MyHomePage> {
   Region? selectedRegion;
-
+  String? selectedValue;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,13 +59,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   setState(() {
                     selectedRegion = region;
                   });
+                  selectedValue = null;
+                  print(region?.name);
                 },
                 width: double.infinity,
                 height: double.infinity,
-                toggleEnable: true,
+                toggleEnable: false,
                 isMultiSelectable: false,
                 dotColor: Colors.black,
-                selectedColor: Colors.red.withOpacity(0.5),
+                selectedColor: Colors.red,
                 strokeColor: Colors.blue,
                 unSelectableId: "bg",
                 centerDotEnable: true,
@@ -76,6 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontSize: 12,
                   color: Colors.black,
                 ),
+                selectedValue: selectedValue,
+                centerIconPath: 'assets/pin_icon.png',
               ),
             ),
           ),
@@ -84,6 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
               if (selectedRegion != null) {
                 mapKey.currentState?.toggleButton(selectedRegion!);
               }
+              setState(() {});
+              selectedValue = '113';
+              selectedRegion = null;
             },
             color: Colors.blue,
             child: const Text("select last selected room"),
