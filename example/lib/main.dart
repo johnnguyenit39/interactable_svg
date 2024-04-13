@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontSize: 12,
                   color: Colors.black,
                 ),
-                selectedValue: selectedValue,
+                selectedValue: '115',
                 centerIconPath: 'assets/pin_icon.png',
               ),
             ),

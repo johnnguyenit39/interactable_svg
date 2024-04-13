@@ -136,7 +136,7 @@ class InteractableSvgState extends State<InteractableSvg> {
     return image;
   }
 
-  getImage() async {
+  _getImage() async {
     if (widget.centerIconPath != null) {
       pinIcon = await getUiImage(
         widget.centerIconPath!,
@@ -159,7 +159,9 @@ class InteractableSvgState extends State<InteractableSvg> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getImage();
+      selectedValue = widget.selectedValue;
+
+      _getImage();
       _loadRegionList();
     });
   }
@@ -179,7 +181,6 @@ class InteractableSvgState extends State<InteractableSvg> {
     setState(() {
       _regionList.addAll(list);
       mapSize = _sizeController.mapSize;
-      selectedValue = widget.selectedValue;
     });
   }
 
