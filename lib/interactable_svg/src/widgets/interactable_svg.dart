@@ -158,10 +158,9 @@ class InteractableSvgState extends State<InteractableSvg> {
   @override
   void initState() {
     super.initState();
+    _getImage();
+    selectedValue = widget.selectedValue;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      selectedValue = widget.selectedValue;
-
-      _getImage();
       _loadRegionList();
     });
   }
